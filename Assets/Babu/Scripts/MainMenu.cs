@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Babu
 {
@@ -37,12 +38,40 @@ namespace Babu
             MenuBack.GetComponent<Animator>().SetTrigger("Open");
         }
 
-        void OpenStroy()
+        void OpenStory()
         {
             Story.SetActive(true);
             Story.GetComponent<Animator>().SetTrigger("Open");
         }
 
+        public void BtnBack(int num)
+        {
+            switch(num)
+            {
+                case 0: // Manual
+                    Manual.GetComponent<Animator>().SetTrigger("Close");
+                    Invoke("OpenMenuBack", 1.5f);
+                    break;
+                case 1: // Story
+                    Story.GetComponent<Animator>().SetTrigger("Close");
+                    Invoke("OpenMenuBack", 1.5f);
+                    break;
+            }
+        }
+
+        public void BtnStart()
+        {
+            SceneManager.LoadScene("Stage01");
+        }
+
+        public void BtnExit()
+        {
+            Application.Quit();
+
+        }
+
+
 
     }
 }
+
