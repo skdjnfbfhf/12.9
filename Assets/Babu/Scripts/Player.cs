@@ -20,6 +20,9 @@ namespace Babu
         //총알이 생성될 위치
         public Transform BulletPoint;
 
+        public int hp = 1;
+        public int maxHp = 1;
+
 
 
         void Start()
@@ -31,6 +34,7 @@ namespace Babu
         void Update()
         {
             Move();
+            fireBullet();   
         }
 
         private void Move()
@@ -55,5 +59,37 @@ namespace Babu
             thisRigi.position = new Vector3(poslnScreen.x, 0, poslnScreen.z);
 
         }
+
+        void fireBullet()
+        {
+            reloadTime += Time.deltaTime; // 총알 재장전 시간
+
+            if(Input.GetButton("Fire1") && (bulletTime <= reloadTime))
+            {
+                reloadTime = 0f;
+                GameObject bullet = Instantiate(objButllet, BulletPoint.position, this.transform.rotation);
+                bullet.GetComponent<Bullet>().SetBullet(BulletPoint.position + Vector3.forward); 
+
+            }
+
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Bullet"))
+            {
+                hp -= 1;
+                if (hp < 1)
+                {
+                    Destroy(gameObject);
+                }
+                Destroy(other.gameObject);
+            }
+            else if (other.CompareTag("Enemy"))
+            {
+                hp -= 1;
+            }
+        }
+
     }
 }
