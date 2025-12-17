@@ -15,9 +15,25 @@ namespace Babu
         public float fireRate = 1.0f;
         public float hp = 1.0f;
         public float maxHp = 1.0f;
+        public GameObject[] item; 
+
+        private GameManager gameManager;
 
         private void Start()
         {
+            GameObject gamManagerObject =
+                GameObject.FindGameObjectWithTag("GameManager");
+            if (gamManagerObject != null)
+            {
+                gameManager = gamManagerObject.GetComponent<GameManager>();
+            }
+            if (gameManager == null)
+            {
+                Debug.LogError("게임 매니저가 존재하지 않습니다.");
+
+            }
+
+
             Player = GameObject.FindGameObjectWithTag("Player");
 
             if (Player == null)
@@ -62,6 +78,13 @@ namespace Babu
                 hp -= 1f;
                 if(hp < 1.0f)
                 {
+                    int itemNum = gameManager.CreateItem();
+                    if(!other.CompareTag("Player") && itemNum != -1)
+                    {
+                        Instantiate(item[itemNum],
+                            this.transform.position, item[itemNum].transform.rotation);
+                    }
+                    gameManager.listEnemys.Remove(this.gameObject);
                     Destroy(gameObject);
                 }
                 Destroy(other.gameObject);

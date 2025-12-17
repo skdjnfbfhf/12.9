@@ -89,6 +89,23 @@ namespace Babu
             {
                 hp -= 1;
             }
+
+            if(other.CompareTag("Item"))
+            {
+                switch (other.GetComponent<Item>().itemStatus)
+                {
+                    case ItemStatus.hp:
+                        break;
+                    case ItemStatus.upgrade:
+                        break;
+                    case ItemStatus.bomb:
+                        break;
+                }
+                Destroy(other.gameObject);
+                return;
+            }
+
+
         }
 
     }

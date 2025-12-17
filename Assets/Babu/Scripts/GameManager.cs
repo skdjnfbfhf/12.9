@@ -10,6 +10,8 @@ namespace Babu
         public Vector3 spawnValue;
         public int enemyCount;
 
+        
+
         public float spawnWait;
         public float startWait;
         public float waveWait;

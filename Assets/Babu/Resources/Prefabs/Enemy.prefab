@@ -55,6 +55,10 @@ MonoBehaviour:
   fireRate: 1
   hp: 1
   maxHp: 1
+  item:
+  - {fileID: 3696580912339633866, guid: d6af0a79b725cb64b946be9a3f6fe8ed, type: 3}
+  - {fileID: 1977388398431070538, guid: fe68da3f7fe74e94fb4ce608984b8da0, type: 3}
+  - {fileID: 1175472525514144739, guid: 8eef59b39ce0c564c9b29163ce4948c1, type: 3}
 --- !u!54 &5107918264124314066
 Rigidbody:
   m_ObjectHideFlags: 0
