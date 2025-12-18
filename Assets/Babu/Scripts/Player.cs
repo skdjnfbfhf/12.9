@@ -2,6 +2,7 @@ using Codice.CM.Client.Differences;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Codice.Client.Common.EventTracking.TrackFeatureUseEvent.Features.DesktopGUI.Filters;
 
 namespace Babu
 {
@@ -23,10 +24,21 @@ namespace Babu
         public int hp = 1;
         public int maxHp = 1;
 
-
+        GameManager gameManager;
 
         void Start()
         {
+            GameObject gamManagerObject =
+                GameObject.FindGameObjectWithTag("GameManager");
+            if (gamManagerObject != null)
+            {
+                gameManager = gamManagerObject.GetComponent<GameManager>();
+            }
+            if (gameManager == null)
+            {
+                Debug.LogError("게임 매니저가 존재하지 않습니다.");
+
+            }
             thisRigi = this.GetComponent<Rigidbody>();
         }
 
@@ -74,12 +86,61 @@ namespace Babu
 
         }
 
+        void fireBullet2()
+        {
+            if(Input.GetButtonDown("Fire2") && (GameDataManager.Instance.bombTime 
+                <= GameDataManager.Instance.bombing))
+            {
+                if(GameDataManager.Instance.bomb == 0)
+                {
+                    GameDataManager.Instance.isBomb = true;
+                }
+                else
+                {
+                    GameDataManager.Instance.bomb--;
+                    GameDataManager.Instance.bombing = 0;
+                    for(int i = 0; i < gameManager.listEnemys.Count; i++)
+                    {
+                        if (gameManager.listEnemys[i].GetComponent<Enemy>() != null)
+                        {
+                            gameManager.listEnemys[i].GetComponent<Enemy>().hp -= 1;
+                            if (gameManager.listEnemys[i].GetComponent<Enemy>().hp  < 0)
+                            {
+
+                                //here
+                                int itemNum = gameManager.CreateItem();
+                                if (!other.CompareTag("Player") && itemNum != -1)
+                                {
+                                    Instantiate(item[itemNum],
+                                        this.transform.position, item[itemNum].transform.rotation);
+                                }
+                                gameManager.listEnemys.Remove(this.gameObject);
+                                Destroy(gameObject);
+                                //end
+
+                                Destroy(gameManager.listEnemys[i].gameObject);
+                            }
+                        }
+                        else
+                        {
+                        }
+                    }
+                }
+            }
+
+        }
+
+
+
+
+
         private void OnTriggerEnter(Collider other)
         {
+
             if (other.CompareTag("Bullet"))
             {
-                hp -= 1;
-                if (hp < 1)
+                GameDataManager.Instance.hp -= 1;
+                if (GameDataManager.Instance.hp < 1)
                 {
                     Destroy(gameObject);
                 }
@@ -87,18 +148,30 @@ namespace Babu
             }
             else if (other.CompareTag("Enemy"))
             {
-                hp -= 1;
+                GameDataManager.Instance.hp -= 1;
             }
 
-            if(other.CompareTag("Item"))
+            if (other.CompareTag("Item"))
             {
                 switch (other.GetComponent<Item>().itemStatus)
                 {
                     case ItemStatus.hp:
+                        if(GameDataManager.Instance.hp < GameDataManager.Instance.maxHp)
+                        {
+                            GameDataManager.Instance.hp += 1f;
+                        }
                         break;
                     case ItemStatus.upgrade:
+                        if (GameDataManager.Instance.upgrade < GameDataManager.Instance.maxUpgrade)
+                        {
+                            GameDataManager.Instance.upgrade++;
+                        }
                         break;
                     case ItemStatus.bomb:
+                        if (GameDataManager.Instance.bomb < GameDataManager.Instance.maxBomb)
+                        {
+                            GameDataManager.Instance.bomb++;
+                        }
                         break;
                 }
                 Destroy(other.gameObject);
