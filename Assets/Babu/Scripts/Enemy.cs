@@ -66,6 +66,18 @@ namespace Babu
             }
         }
 
+        public void InitItem()
+        {
+            int itemNum = gameManager.CreateItem();
+            if (itemNum != -1)
+            {
+                Instantiate(item[itemNum],
+                    this.transform.position, item[itemNum].transform.rotation);
+            }
+        }
+
+
+
         private void OnTriggerEnter(Collider other)
         {
             if(other.CompareTag("Enemy"))

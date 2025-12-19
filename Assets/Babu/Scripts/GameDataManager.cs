@@ -28,6 +28,21 @@ namespace Babu
         public int bomb = 0;
         public int maxBomb = 3;
 
+        private void Start()
+        {
+            SaveData();
+        }
+
+
+
+        public void SaveData()
+        {
+            if(PlayerPrefs.HasKey("id"))
+            {
+                string id = PlayerPrefs.GetString("id");
+                Debug.Log(id);
+            }
+        }
 
     }
 }

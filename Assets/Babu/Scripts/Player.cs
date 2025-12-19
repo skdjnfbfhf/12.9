@@ -26,6 +26,10 @@ namespace Babu
 
         GameManager gameManager;
 
+        public GameObject[] item;
+
+
+
         void Start()
         {
             GameObject gamManagerObject =
@@ -106,18 +110,7 @@ namespace Babu
                             gameManager.listEnemys[i].GetComponent<Enemy>().hp -= 1;
                             if (gameManager.listEnemys[i].GetComponent<Enemy>().hp  < 0)
                             {
-
-                                //here
-                                int itemNum = gameManager.CreateItem();
-                                if (!other.CompareTag("Player") && itemNum != -1)
-                                {
-                                    Instantiate(item[itemNum],
-                                        this.transform.position, item[itemNum].transform.rotation);
-                                }
-                                gameManager.listEnemys.Remove(this.gameObject);
-                                Destroy(gameObject);
-                                //end
-
+                                gameManager.listEnemys[i].GetComponent<Enemy>().InitItem();
                                 Destroy(gameManager.listEnemys[i].gameObject);
                             }
                         }
